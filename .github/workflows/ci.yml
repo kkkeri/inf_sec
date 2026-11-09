@@ -9,6 +9,7 @@ jobs:
   build:
     name: Сборка Java 25
     runs-on: ubuntu-latest
+
     steps:
       - name: Получить код репозитория
         uses: actions/checkout@v7
@@ -22,3 +23,15 @@ jobs:
 
       - name: Собрать проект через Maven
         run: mvn --batch-mode --no-transfer-progress verify
+
+      - name: SAST — SpotBugs и Find Security Bugs
+        id: sast
+        run: mvn --batch-mode --no-transfer-progress spotbugs:check
+
+      - name: Сохранить отчёт SAST
+        if: ${{ !cancelled() && steps.sast.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: sast-spotbugs
+          path: target/spotbugsXml.xml
+          if-no-files-found: error
