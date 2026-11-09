@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class AuthController {
-    private final JwtEncoder encoder;
+public final class AuthController {    private final JwtEncoder encoder;
     private final Properties users = new Properties();
     private final BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder(12);
     private final String dummyHash = bcrypt.encode(UUID.randomUUID().toString());
@@ -33,8 +32,7 @@ public class AuthController {
 
     public record LoginRequest(String username, String password) {}
 
-    @PostMapping("/auth/login")
-    public Map<String, String> login(@RequestBody LoginRequest request) {
+    @PostMapping(value = "/auth/login", consumes = "application/json")    public Map<String, String> login(@RequestBody LoginRequest request) {
         if (request.username() == null || request.password() == null
                 || request.password().getBytes(StandardCharsets.UTF_8).length > 72) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);

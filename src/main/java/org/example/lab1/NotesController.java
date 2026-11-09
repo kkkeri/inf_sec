@@ -9,14 +9,15 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.HtmlUtils;
+import javax.sql.DataSource;
 
 @RestController
 @RequestMapping("/api/data")
 public class NotesController {
     private final JdbcTemplate jdbc;
 
-    public NotesController(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
+    public NotesController(DataSource dataSource) {
+        this.jdbc = new JdbcTemplate(dataSource);
     }
 
     public record NewNote(String text) {}
