@@ -43,6 +43,7 @@ jobs:
           org.owasp:dependency-check-maven:13.0.0:check
           -Dformat=HTML
           -DfailBuildOnCVSS=9
+          '-DnvdDatafeedUrl=https://nvd.nist.gov/feeds/json/cve/2.0/nvdcve-2.0-{0}.json.gz'
       - name: Сохранить отчёт SCA
         if: ${{ !cancelled() && (steps.sca.outcome == 'success' || steps.sca.outcome == 'failure') }}
         uses: actions/upload-artifact@v7
