@@ -38,15 +38,11 @@ jobs:
       - name: SCA — OWASP Dependency-Check
         id: sca
         if: ${{ !cancelled() && (steps.sast.outcome == 'success' || steps.sast.outcome == 'failure') }}
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: >
           mvn --batch-mode --no-transfer-progress
           org.owasp:dependency-check-maven:13.0.0:check
           -Dformat=HTML
           -DfailBuildOnCVSS=9
-          -DnvdApiKeyEnvironmentVariable=NVD_API_KEY
-
       - name: Сохранить отчёт SCA
         if: ${{ !cancelled() && (steps.sca.outcome == 'success' || steps.sca.outcome == 'failure') }}
         uses: actions/upload-artifact@v7
